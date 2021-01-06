@@ -1,0 +1,26 @@
+# Build artifacts
+bin/
+obj/
+*.o
+*.so
+*.dylib
+*.dll
+*.exe
+
+# Test logs and temporary files
+*.log
+*.tmp
+*.dat
+*.wal
+*.chk
+wal_storage/
+data/
+
+# Python cache
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# OS metadata
+.DS_Store
+Thumbs.db
