@@ -1,0 +1,53 @@
+      *================================================================*
+      * BASALT CLEARINGHOUSE ENGINE - PORTFOLIO RISK SCHEMAS           *
+      * SPAN 16-scenario grid, historical VaR, CVaR, collateral matrix *
+      *================================================================*
+       01 BS-SPAN-CONFIG.
+          05 BS-SPAN-PRICE-SIGMA         PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-SPAN-VOL-SHIFT           PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-SPAN-EXTREME-FACTOR      PIC S9(3)V9(8)  COMP-3 VALUE 0.
+
+       01 BS-SPAN-GRID.
+          05 BS-SCENARIO-ENTRY OCCURS 16 TIMES INDEXED BY BS-SCEN-IDX.
+             10 BS-SCEN-PRICE-MULT       PIC S9(3)V9(8)  COMP-3.
+             10 BS-SCEN-VOL-MULT         PIC S9(3)V9(8)  COMP-3.
+             10 BS-SCEN-PORTFOLIO-PNL    PIC S9(18)V9(8) COMP-3.
+             10 BS-SCEN-SHORT-OPT-CHARGE PIC S9(18)V9(8) COMP-3.
+             10 BS-SCEN-NET-LOSS         PIC S9(18)V9(8) COMP-3.
+          05 BS-SPAN-MAX-LOSS            PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-SPAN-WORST-SCENARIO      PIC 9(2)  VALUE 1.
+
+       01 BS-HISTORICAL-VAR-STATE.
+          05 BS-VAR-OBSERVATION-COUNT    PIC 9(4)  VALUE 252.
+          05 BS-VAR-PNL-HISTORY OCCURS 252 TIMES INDEXED BY BS-VAR-IDX.
+             10 BS-VAR-DAY-INDEX         PIC 9(4).
+             10 BS-VAR-DAILY-RETURN      PIC S9(3)V9(8)  COMP-3.
+             10 BS-VAR-SIMULATED-PNL     PIC S9(18)V9(8) COMP-3.
+          05 BS-VAR-MEAN-PNL             PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-VAR-STDEV-PNL            PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-VAR-SKEWNESS             PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-VAR-KURTOSIS             PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-VAR-95-PCT               PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-VAR-99-PCT               PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-VAR-CORNISH-FISHER-99    PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-EXPECTED-SHORTFALL-99    PIC S9(18)V9(8) COMP-3 VALUE 0.
+
+       01 BS-COLLATERAL-HAIRCUTS.
+          05 BS-HC-CASH                  PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-HC-SOVEREIGN-T1          PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-HC-SOVEREIGN-T2          PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-HC-CORP-AAA              PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-HC-CORP-BBB              PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-HC-EQUITY-LARGE          PIC S9(3)V9(8)  COMP-3 VALUE 0.
+          05 BS-HC-EQUITY-MIDSMALL       PIC S9(3)V9(8)  COMP-3 VALUE 0.
+
+       01 BS-MARGIN-REQUIREMENT.
+          05 BS-MRG-INITIAL-MARGIN       PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-MRG-VARIATION-MARGIN     PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-MRG-LIQUIDITY-ADDON      PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-MRG-CONCENTRATION-ADDON  PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-MRG-TOTAL-REQUIRED       PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-MRG-POSTED-COLLATERAL    PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-MRG-EFFECTIVE-COLLATERAL PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-MRG-SURPLUS-DEFICIT      PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 BS-MRG-CALL-TRIGGERED       PIC 9(1)  VALUE 0.
