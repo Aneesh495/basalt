@@ -1,9 +1,9 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - FIXED-POINT MATHEMATICS          *
-      * 128-bit packed decimal structures with 8 decimal places        *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - FIXED-POINT MATHEMATICS          *
+      *> 128-bit packed decimal structures with 8 decimal places        *
+      *>================================================================*
        01 BS-MATH-CONFIG.
-          05 BS-MATH-SCALE               PIC 9(8)  VALUE 100000000.
+          05 BS-MATH-SCALE               PIC 9(9)  VALUE 100000000.
           05 BS-MATH-ROUND-HALF-EVEN     PIC 9(1)  VALUE 1.
           05 BS-MATH-ROUND-UP            PIC 9(1)  VALUE 2.
           05 BS-MATH-ROUND-DOWN          PIC 9(1)  VALUE 3.
