@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - PORTFOLIO RISK SCHEMAS           *
-      * SPAN 16-scenario grid, historical VaR, CVaR, collateral matrix *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - PORTFOLIO RISK SCHEMAS           *
+      *> SPAN 16-scenario grid, historical VaR, CVaR, collateral matrix *
+      *>================================================================*
        01 BS-SPAN-CONFIG.
           05 BS-SPAN-PRICE-SIGMA         PIC S9(3)V9(8)  COMP-3 VALUE 0.
           05 BS-SPAN-VOL-SHIFT           PIC S9(3)V9(8)  COMP-3 VALUE 0.

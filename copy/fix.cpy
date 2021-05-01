@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - FIX PROTOCOL SCHEMAS             *
-      * FIX 4.4 / 5.0 tag-value tokenizer, order messages, execution   *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - FIX PROTOCOL SCHEMAS             *
+      *> FIX 4.4 / 5.0 tag-value tokenizer, order messages, execution   *
+      *>================================================================*
        01 BS-FIX-HEADER.
           05 BS-FIX-BEGIN-STRING         PIC X(8)  VALUE "FIX.4.4".
           05 BS-FIX-BODY-LENGTH          PIC 9(6)  VALUE 0.

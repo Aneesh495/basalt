@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - COMMON DEFINITIONS               *
-      * System constants, return codes, and global status fields       *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - COMMON DEFINITIONS               *
+      *> System constants, return codes, and global status fields       *
+      *>================================================================*
        01 BS-COMMON-CONSTANTS.
           05 BS-MAX-ACCOUNTS             PIC 9(6)  VALUE 10000.
           05 BS-MAX-ENTRIES              PIC 9(8)  VALUE 1000000.

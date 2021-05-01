@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - ARIES WAL RECORD SCHEMAS         *
-      * Physiological logging, LSN chains, CLR records, checkpoints    *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - ARIES WAL RECORD SCHEMAS         *
+      *> Physiological logging, LSN chains, CLR records, checkpoints    *
+      *>================================================================*
        01 BS-WAL-RECORD.
           05 BS-WAL-LSN                  PIC 9(18) VALUE 0.
           05 BS-WAL-PREV-LSN             PIC 9(18) VALUE 0.

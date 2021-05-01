@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - SLOTTED PAGE AND BUFFER POOL     *
-      * Page layout, slot directory, PageLSN, buffer frame management  *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - SLOTTED PAGE AND BUFFER POOL     *
+      *> Page layout, slot directory, PageLSN, buffer frame management  *
+      *>================================================================*
        01 BS-SLOTTED-PAGE.
           05 BS-PAGE-HEADER.
              10 BS-PG-ID                 PIC 9(8)  VALUE 0.

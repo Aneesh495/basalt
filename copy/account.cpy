@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - ACCOUNT SCHEMAS                  *
-      * Bi-temporal account master records and in-memory tables        *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - ACCOUNT SCHEMAS                  *
+      *> Bi-temporal account master records and in-memory tables        *
+      *>================================================================*
        01 BS-ACCOUNT-RECORD.
           05 BS-ACC-ID                   PIC X(16) VALUE SPACES.
           05 BS-ACC-OWNER-BIC            PIC X(11) VALUE SPACES.

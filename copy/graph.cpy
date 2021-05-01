@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - DIRECTED DEBT GRAPH SCHEMAS      *
-      * Graph topology, adjacency matrix, cycle detection buffers      *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - DIRECTED DEBT GRAPH SCHEMAS      *
+      *> Graph topology, adjacency matrix, cycle detection buffers      *
+      *>================================================================*
        01 BS-DEBT-GRAPH.
           05 BS-GRP-NODE-COUNT           PIC 9(4)  VALUE 0.
           05 BS-GRP-EDGE-COUNT           PIC 9(6)  VALUE 0.

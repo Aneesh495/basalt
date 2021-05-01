@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - SETTLEMENT ORDER SCHEMAS         *
-      * Clearing obligations, trade orders, and settlement batches     *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - SETTLEMENT ORDER SCHEMAS         *
+      *> Clearing obligations, trade orders, and settlement batches     *
+      *>================================================================*
        01 BS-SETTLEMENT-ORDER.
           05 BS-ORD-ID                   PIC 9(12) VALUE 0.
           05 BS-ORD-CYCLE-ID             PIC 9(8)  VALUE 0.

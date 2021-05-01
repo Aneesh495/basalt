@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - FINANCIAL CONTRACT SCHEMAS       *
-      * ACTUS contract models (PAM, ANN, LAM, IRS, FXFRWD) and flows   *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - FINANCIAL CONTRACT SCHEMAS       *
+      *> ACTUS contract models (PAM, ANN, LAM, IRS, FXFRWD) and flows   *
+      *>================================================================*
        01 BS-FINANCIAL-CONTRACT.
           05 BS-CTR-ID                   PIC X(16) VALUE SPACES.
           05 BS-CTR-TYPE                 PIC 9(2)  VALUE 1.

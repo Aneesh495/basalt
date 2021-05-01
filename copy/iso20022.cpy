@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - ISO 20022 MESSAGE SCHEMAS        *
-      * pacs.008, pacs.009, camt.053, camt.054, pain.001 structures   *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - ISO 20022 MESSAGE SCHEMAS        *
+      *> pacs.008, pacs.009, camt.053, camt.054, pain.001 structures   *
+      *>================================================================*
        01 BS-ISO-BAH-HEADER.
           05 BS-BAH-FROM-BIC             PIC X(11) VALUE SPACES.
           05 BS-BAH-TO-BIC               PIC X(11) VALUE SPACES.

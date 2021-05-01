@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - DAY-COUNT CONVENTIONS            *
-      * 30E/360, 30/360 ISDA, ACT/360, ACT/365, ACT/ACT formulas     *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - DAY-COUNT CONVENTIONS            *
+      *> 30E/360, 30/360 ISDA, ACT/360, ACT/365, ACT/ACT formulas     *
+      *>================================================================*
        01 BS-DAYCOUNT-INPUT.
           05 BS-DC-CONVENTION            PIC 9(2)  VALUE 1.
              88 BS-DC-30E-360            VALUE 1.

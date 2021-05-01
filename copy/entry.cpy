@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - JOURNAL ENTRY SCHEMAS            *
-      * Bi-temporal double-entry ledger records and query parameters   *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - JOURNAL ENTRY SCHEMAS            *
+      *> Bi-temporal double-entry ledger records and query parameters   *
+      *>================================================================*
        01 BS-JOURNAL-ENTRY.
           05 BS-ENT-ID                   PIC 9(12) VALUE 0.
           05 BS-ENT-BATCH-ID             PIC 9(12) VALUE 0.

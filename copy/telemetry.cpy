@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - TELEMETRY AND METRICS            *
-      * Performance counters, latency histograms, settlement savings   *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - TELEMETRY AND METRICS            *
+      *> Performance counters, latency histograms, settlement savings   *
+      *>================================================================*
        01 BS-TELEMETRY-METRICS.
           05 BS-TEL-ORDERS-TOTAL         PIC 9(10) VALUE 0.
           05 BS-TEL-ORDERS-CLEARED       PIC 9(10) VALUE 0.

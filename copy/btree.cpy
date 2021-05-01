@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - B+TREE INDEX SCHEMAS             *
-      * Node layout, key slots, child pointers, cursor range iterators *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - B+TREE INDEX SCHEMAS             *
+      *> Node layout, key slots, child pointers, cursor range iterators *
+      *>================================================================*
        01 BS-BTREE-NODE.
           05 BS-BT-NODE-ID               PIC 9(8)  VALUE 0.
           05 BS-BT-LEVEL                 PIC 9(2)  VALUE 0.

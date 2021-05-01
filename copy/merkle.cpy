@@ -1,7 +1,7 @@
-      *================================================================*
-      * BASALT CLEARINGHOUSE ENGINE - CRYPTOGRAPHIC MERKLE TREE        *
-      * RFC 6962 tree accumulator, SHA-256 state, audit proofs         *
-      *================================================================*
+      *>================================================================*
+      *> BASALT CLEARINGHOUSE ENGINE - CRYPTOGRAPHIC MERKLE TREE        *
+      *> RFC 6962 tree accumulator, SHA-256 state, audit proofs         *
+      *>================================================================*
        01 BS-SHA256-STATE.
           05 BS-SHA-H0                   PIC 9(10) VALUE 1779033703.
           05 BS-SHA-H1                   PIC 9(10) VALUE 3144134277.
