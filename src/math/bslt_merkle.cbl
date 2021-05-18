@@ -33,6 +33,7 @@
           05 WS-CURR-IDX                 PIC 9(4)  VALUE 0.
           05 WS-PARENT-IDX               PIC 9(4)  VALUE 0.
           05 WS-STEP-IDX                 PIC 9(4)  VALUE 0.
+          05 WS-FOUND                    PIC 9(1)  VALUE 0.
 
        LINKAGE SECTION.
        01 LNK-MKL-OP                     PIC X(8).
@@ -43,10 +44,14 @@
        01 LNK-MKL-ROOT-OUT               PIC X(32).
        01 LNK-MKL-PROOF-LEAF-IDX         PIC 9(4).
        01 LNK-MKL-PROOF-OUT.
+          05 LNK-PRF-LEAF-INDEX          PIC 9(4).
+          05 LNK-PRF-LEAF-HASH           PIC X(32).
           05 LNK-PRF-DEPTH               PIC 9(2).
           05 LNK-PRF-STEPS OCCURS 16 TIMES.
              10 LNK-PRF-SIBLING          PIC X(32).
              10 LNK-PRF-DIR              PIC 9(1).
+          05 LNK-PRF-ROOT-TO-CHECK       PIC X(32).
+          05 LNK-PRF-IS-VALID            PIC 9(1).
        01 LNK-MKL-VERIFY-RESULT          PIC 9(1).
        01 LNK-MKL-STATUS                 PIC 9(4).
 
@@ -161,6 +166,7 @@
       *> Climb from leaf to root finding sibling at each layer
            MOVE 0 TO WS-STEP-IDX
            PERFORM UNTIL WS-CURR-IDX = BS-MKL-NODE-COUNT
+               MOVE 0 TO WS-FOUND
                PERFORM VARYING WS-I FROM 1 BY 1 
                        UNTIL WS-I > BS-MKL-NODE-COUNT
                    IF BS-MKL-LEFT-CHILD(WS-I) = WS-CURR-IDX
@@ -169,6 +175,7 @@
                            TO LNK-PRF-SIBLING(WS-STEP-IDX)
                        MOVE 2 TO LNK-PRF-DIR(WS-STEP-IDX)
                        MOVE WS-I TO WS-CURR-IDX
+                       MOVE 1 TO WS-FOUND
                        EXIT PERFORM
                    ELSE
                        IF BS-MKL-RIGHT-CHILD(WS-I) = WS-CURR-IDX
@@ -177,10 +184,14 @@
                                TO LNK-PRF-SIBLING(WS-STEP-IDX)
                            MOVE 1 TO LNK-PRF-DIR(WS-STEP-IDX)
                            MOVE WS-I TO WS-CURR-IDX
+                           MOVE 1 TO WS-FOUND
                            EXIT PERFORM
                        END-IF
                    END-IF
                END-PERFORM
+               IF WS-FOUND = 0 OR WS-STEP-IDX >= 16
+                   EXIT PERFORM
+               END-IF
            END-PERFORM
 
            MOVE WS-STEP-IDX TO LNK-PRF-DEPTH.

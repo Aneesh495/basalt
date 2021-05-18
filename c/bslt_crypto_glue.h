@@ -21,10 +21,10 @@ uint32_t bslt_bswap32(uint32_t x);
 void bslt_sha256_transform(uint32_t state[8], const uint8_t block[64]);
 
 /* Direct full SHA-256 calculation */
-void bslt_sha256_full(const uint8_t *data, size_t len, uint8_t digest[32]);
+void bslt_sha256_full(const uint8_t *data, uint32_t len, uint8_t digest[32]);
 
 /* CRC32 calculation for ARIES WAL records and storage pages */
-uint32_t bslt_crc32(const uint8_t *buf, size_t len);
+uint32_t bslt_crc32(const uint8_t *buf, uint32_t len);
 
 #ifdef __cplusplus
 }
