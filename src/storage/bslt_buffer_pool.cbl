@@ -156,7 +156,7 @@
                        IF WS-CLOCK-HAND > 64
                            MOVE 1 TO WS-CLOCK-HAND
                        END-IF
-                       GOBACK
+                       EXIT PERFORM
                    END-IF
                END-IF
 

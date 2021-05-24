@@ -103,7 +103,8 @@
       *>----------------------------------------------------------------*
       *> TEST 5: Verify lookup of inserted key "KEY-15"
       *>----------------------------------------------------------------*
-           STRING "KEY-15" INTO WS-FORMATTED-KEY
+           MOVE 15 TO WS-I
+           STRING "KEY-" WS-I INTO WS-FORMATTED-KEY
            CALL "BSLT-BTREE-INDEX" USING "SEARCH  " WS-FORMATTED-KEY
                                          WS-IN-PAGE WS-IN-SLOT
                                          WS-OUT-PAGE WS-OUT-SLOT

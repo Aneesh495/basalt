@@ -26,13 +26,18 @@
           05 WS-IN-TX-ID                 PIC 9(12) VALUE 101.
           05 WS-IN-TYPE                  PIC 9(2)  VALUE 1.
           05 WS-IN-PAGE-ID               PIC 9(8)  VALUE 12.
-          05 WS-IN-PAYLOAD               PIC X(128) VALUE "UPDATE ACCT-101 DEBIT 500.00".
+          05 WS-IN-SLOT-ID               PIC 9(4)  VALUE 1.
+          05 WS-IN-UNDO-NEXT             PIC 9(18) VALUE 0.
+          05 WS-IN-BEFORE-IMG            PIC X(64) VALUE "ACCT-101 BAL: 1000.00".
+          05 WS-IN-AFTER-IMG             PIC X(64) VALUE "ACCT-101 BAL:  500.00".
           05 WS-OUT-LSN                  PIC 9(18) VALUE 0.
           05 WS-SAVED-LSN                PIC 9(18) VALUE 0.
 
       *> Checkpoint test variables
        01 WS-CHKPT-TEST-VARS.
           05 WS-CHKPT-OUT-LSN            PIC 9(18) VALUE 0.
+          05 WS-CHKPT-DIRTY-COUNT        PIC 9(4)  VALUE 0.
+          05 WS-CHKPT-TX-COUNT           PIC 9(4)  VALUE 0.
 
        LINKAGE SECTION.
        01 LNK-TESTS-PASSED               PIC 9(4).
@@ -49,12 +54,16 @@
            MOVE 101 TO WS-IN-TX-ID
            MOVE 1   TO WS-IN-TYPE
            MOVE 12  TO WS-IN-PAGE-ID
-           MOVE "UPDATE ACCT-101 DEBIT 500.00" TO WS-IN-PAYLOAD
+           MOVE 1   TO WS-IN-SLOT-ID
+           MOVE 0   TO WS-IN-UNDO-NEXT
+           MOVE "ACCT-101 BAL: 1000.00" TO WS-IN-BEFORE-IMG
+           MOVE "ACCT-101 BAL:  500.00" TO WS-IN-AFTER-IMG
 
            CALL "BSLT-WAL-LOGGER" USING "APPEND  " WS-IN-TX-ID
                                         WS-IN-TYPE WS-IN-PAGE-ID
-                                        WS-IN-PAYLOAD WS-OUT-LSN
-                                        WS-STATUS
+                                        WS-IN-SLOT-ID WS-IN-UNDO-NEXT
+                                        WS-IN-BEFORE-IMG WS-IN-AFTER-IMG
+                                        WS-OUT-LSN WS-STATUS
            IF WS-STATUS = BS-RC-OK AND WS-OUT-LSN > 0
                ADD 1 TO LNK-TESTS-PASSED
                MOVE WS-OUT-LSN TO WS-SAVED-LSN
@@ -68,8 +77,9 @@
       *>----------------------------------------------------------------*
            CALL "BSLT-WAL-LOGGER" USING "APPEND  " WS-IN-TX-ID
                                         WS-IN-TYPE WS-IN-PAGE-ID
-                                        WS-IN-PAYLOAD WS-OUT-LSN
-                                        WS-STATUS
+                                        WS-IN-SLOT-ID WS-IN-UNDO-NEXT
+                                        WS-IN-BEFORE-IMG WS-IN-AFTER-IMG
+                                        WS-OUT-LSN WS-STATUS
            IF WS-STATUS = BS-RC-OK AND WS-OUT-LSN > WS-SAVED-LSN
                ADD 1 TO LNK-TESTS-PASSED
            ELSE
@@ -80,21 +90,24 @@
       *>----------------------------------------------------------------*
       *> TEST 3: Force WAL buffer flush up to current LSN
       *>----------------------------------------------------------------*
-           CALL "BSLT-WAL-LOGGER" USING "FORCE   " WS-IN-TX-ID
+           CALL "BSLT-WAL-LOGGER" USING "FLUSH   " WS-IN-TX-ID
                                         WS-IN-TYPE WS-IN-PAGE-ID
-                                        WS-IN-PAYLOAD WS-OUT-LSN
-                                        WS-STATUS
+                                        WS-IN-SLOT-ID WS-IN-UNDO-NEXT
+                                        WS-IN-BEFORE-IMG WS-IN-AFTER-IMG
+                                        WS-OUT-LSN WS-STATUS
            IF WS-STATUS = BS-RC-OK
                ADD 1 TO LNK-TESTS-PASSED
            ELSE
                ADD 1 TO LNK-TESTS-FAILED
-               DISPLAY "FAIL: WAL logger force flush failed"
+               DISPLAY "FAIL: WAL logger flush failed"
            END-IF
 
       *>----------------------------------------------------------------*
       *> TEST 4: Emit fuzzy checkpoint record
       *>----------------------------------------------------------------*
            CALL "BSLT-CHECKPOINT" USING "CREATE  " WS-CHKPT-OUT-LSN
+                                        WS-CHKPT-DIRTY-COUNT
+                                        WS-CHKPT-TX-COUNT
                                         WS-STATUS
            IF WS-STATUS = BS-RC-OK AND WS-CHKPT-OUT-LSN > 0
                ADD 1 TO LNK-TESTS-PASSED

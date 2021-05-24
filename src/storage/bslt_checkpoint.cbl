@@ -17,6 +17,15 @@
           05 WS-END-LSN                  PIC 9(18) VALUE 0.
           05 WS-STATUS                   PIC 9(4)  VALUE 0.
 
+       01 WS-WAL-CALL-VARS.
+          05 WS-WAL-TX-ID                PIC 9(12) VALUE 0.
+          05 WS-WAL-TYPE                 PIC 9(2)  VALUE 6.
+          05 WS-WAL-PAGE-ID              PIC 9(8)  VALUE 0.
+          05 WS-WAL-SLOT-ID              PIC 9(4)  VALUE 0.
+          05 WS-WAL-UNDO-NEXT            PIC 9(18) VALUE 0.
+          05 WS-WAL-BEFORE-IMG           PIC X(64) VALUE SPACES.
+          05 WS-WAL-AFTER-IMG            PIC X(64) VALUE SPACES.
+
        LINKAGE SECTION.
        01 LNK-CKP-OP                     PIC X(8).
        01 LNK-OUT-CHKPT-LSN              PIC 9(18).
@@ -32,14 +41,18 @@
            MOVE BS-RC-OK TO LNK-OUT-STATUS
 
       *> 1. Write CHECKPOINT_START log record
+           MOVE 0 TO WS-WAL-TX-ID
+           MOVE 6 TO WS-WAL-TYPE
+           MOVE 0 TO WS-WAL-PAGE-ID WS-WAL-SLOT-ID WS-WAL-UNDO-NEXT
+           MOVE SPACES TO WS-WAL-BEFORE-IMG WS-WAL-AFTER-IMG
            CALL "BSLT-WAL-LOGGER" USING "APPEND  "
-                                        0
-                                        6
-                                        0
-                                        0
-                                        0
-                                        SPACES
-                                        SPACES
+                                        WS-WAL-TX-ID
+                                        WS-WAL-TYPE
+                                        WS-WAL-PAGE-ID
+                                        WS-WAL-SLOT-ID
+                                        WS-WAL-UNDO-NEXT
+                                        WS-WAL-BEFORE-IMG
+                                        WS-WAL-AFTER-IMG
                                         WS-START-LSN
                                         WS-STATUS
 
@@ -48,14 +61,15 @@
            MOVE 2 TO LNK-OUT-ACTIVE-TX-COUNT
 
       *> 3. Write CHECKPOINT_END log record
+           MOVE 7 TO WS-WAL-TYPE
            CALL "BSLT-WAL-LOGGER" USING "APPEND  "
-                                        0
-                                        7
-                                        0
-                                        0
-                                        0
-                                        SPACES
-                                        SPACES
+                                        WS-WAL-TX-ID
+                                        WS-WAL-TYPE
+                                        WS-WAL-PAGE-ID
+                                        WS-WAL-SLOT-ID
+                                        WS-WAL-UNDO-NEXT
+                                        WS-WAL-BEFORE-IMG
+                                        WS-WAL-AFTER-IMG
                                         WS-END-LSN
                                         WS-STATUS
 

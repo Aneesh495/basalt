@@ -73,6 +73,8 @@
                    PERFORM 1000-INSERT-KEY
                WHEN "SEARCH  "
                    PERFORM 2000-SEARCH-KEY
+               WHEN "DELETE  "
+                   PERFORM 4000-DELETE-KEY
                WHEN OTHER
                    MOVE BS-RC-PARSE-ERROR TO LNK-OUT-STATUS
            END-EVALUATE
@@ -201,3 +203,42 @@
                MOVE LNK-IN-RID-PAGE TO WS-R-PAGE(WS-NEW-NODE, WS-I)
                MOVE LNK-IN-RID-SLOT TO WS-R-SLOT(WS-NEW-NODE, WS-I)
            END-IF.
+
+        4000-DELETE-KEY.
+            MOVE WS-ROOT-NODE-ID TO WS-CURR-NODE
+
+       *> Traverse down internal nodes to leaf
+            PERFORM UNTIL WS-N-LEVEL(WS-CURR-NODE) = 0
+                MOVE 1 TO WS-INSERT-POS
+                PERFORM VARYING WS-I FROM 1 BY 1 
+                        UNTIL WS-I > WS-N-COUNT(WS-CURR-NODE)
+                    IF LNK-IN-KEY >= WS-K-VAL(WS-CURR-NODE, WS-I)
+                        COMPUTE WS-INSERT-POS = WS-I + 1
+                    END-IF
+                END-PERFORM
+                MOVE WS-C-ID(WS-CURR-NODE, WS-INSERT-POS) TO WS-CURR-NODE
+            END-PERFORM
+
+       *> Find key and shift remaining entries left
+            MOVE 0 TO WS-FOUND
+            PERFORM VARYING WS-I FROM 1 BY 1 
+                    UNTIL WS-I > WS-N-COUNT(WS-CURR-NODE)
+                IF WS-K-VAL(WS-CURR-NODE, WS-I) = LNK-IN-KEY
+                    MOVE 1 TO WS-FOUND
+                    PERFORM VARYING WS-J FROM WS-I BY 1 
+                            UNTIL WS-J >= WS-N-COUNT(WS-CURR-NODE)
+                        MOVE WS-K-VAL(WS-CURR-NODE, WS-J + 1)
+                            TO WS-K-VAL(WS-CURR-NODE, WS-J)
+                        MOVE WS-R-PAGE(WS-CURR-NODE, WS-J + 1)
+                            TO WS-R-PAGE(WS-CURR-NODE, WS-J)
+                        MOVE WS-R-SLOT(WS-CURR-NODE, WS-J + 1)
+                            TO WS-R-SLOT(WS-CURR-NODE, WS-J)
+                    END-PERFORM
+                    SUBTRACT 1 FROM WS-N-COUNT(WS-CURR-NODE)
+                    EXIT PERFORM
+                END-IF
+            END-PERFORM
+
+            IF WS-FOUND = 0
+                MOVE BS-RC-NOT-FOUND TO LNK-OUT-STATUS
+            END-IF.
