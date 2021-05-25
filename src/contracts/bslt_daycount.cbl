@@ -1,9 +1,9 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID. BSLT-DAYCOUNT.
       *>================================================================*
-      *> BASALT CLEARINGHOUSE ENGINE - ISDA DAY-COUNT ALGEBRA          *
-      *> 30E/360, 30/360 ISDA, ACT/360, ACT/365, and ACT/ACT ICMA     *
-      *> Exact Julian Day Number date differences and leap-year rules.  *
+      *> BASALT CLEARINGHOUSE ENGINE - DAY-COUNT CONVENTIONS            *
+      *> Exact ISDA day-count year fractions: 30E/360, 30/360 ISDA,    *
+      *> ACT/360, ACT/365 Fixed, and ACT/ACT ICMA with Richards JDN.    *
       *>================================================================*
        ENVIRONMENT DIVISION.
        DATA DIVISION.
@@ -21,6 +21,13 @@
           05 WS-D2                       PIC 9(2) VALUE 0.
           05 WS-ADJ-D1                   PIC 9(2) VALUE 0.
           05 WS-ADJ-D2                   PIC 9(2) VALUE 0.
+          05 WS-A                        PIC 9(4) VALUE 0.
+          05 WS-Y-ADJ                    PIC 9(8) VALUE 0.
+          05 WS-M-ADJ                    PIC 9(4) VALUE 0.
+          05 WS-T1                       PIC 9(8) VALUE 0.
+          05 WS-T2                       PIC 9(8) VALUE 0.
+          05 WS-T3                       PIC 9(8) VALUE 0.
+          05 WS-T4                       PIC 9(8) VALUE 0.
           05 WS-JDN-1                    PIC 9(10) VALUE 0.
           05 WS-JDN-2                    PIC 9(10) VALUE 0.
           05 WS-DIFF-DAYS                PIC 9(6)  VALUE 0.
@@ -61,7 +68,7 @@
 
            EVALUATE LNK-DC-CONVENTION
                WHEN 1
-      *> 30E/360 (Eurobond basis)
+      *> 30E/360 ISMA
                    PERFORM 1000-CALC-30E-360
                WHEN 2
       *> 30/360 ISDA
@@ -144,15 +151,23 @@
            DIVIDE WS-DIFF-DEC BY WS-DIVISOR GIVING WS-YEAR-FRAC ROUNDED.
 
        6000-COMPUTE-JDN.
-      *> Fliegel-Van Flandern Julian Day Number algorithm
-           COMPUTE WS-JDN-1 = 
-               (1461 * (WS-Y1 + 4800 + ((WS-M1 - 14) / 12))) / 4 + 
-               (367 * (WS-M1 - 2 - 12 * ((WS-M1 - 14) / 12))) / 12 - 
-               (3 * ((WS-Y1 + 4900 + ((WS-M1 - 14) / 12)) / 100)) / 4 + 
-               WS-D1 - 32075
+      *> Richards Gregorian Julian Day Number algorithm with explicit integer division
+           COMPUTE WS-A = (14 - WS-M1) / 12
+           COMPUTE WS-Y-ADJ = WS-Y1 + 4800 - WS-A
+           COMPUTE WS-M-ADJ = WS-M1 + (12 * WS-A) - 3
+           COMPUTE WS-T1 = (153 * WS-M-ADJ + 2) / 5
+           COMPUTE WS-T2 = WS-Y-ADJ / 4
+           COMPUTE WS-T3 = WS-Y-ADJ / 100
+           COMPUTE WS-T4 = WS-Y-ADJ / 400
+           COMPUTE WS-JDN-1 = WS-D1 + WS-T1 + (365 * WS-Y-ADJ) + 
+                              WS-T2 - WS-T3 + WS-T4 - 32045
 
-           COMPUTE WS-JDN-2 = 
-               (1461 * (WS-Y2 + 4800 + ((WS-M2 - 14) / 12))) / 4 + 
-               (367 * (WS-M2 - 2 - 12 * ((WS-M2 - 14) / 12))) / 12 - 
-               (3 * ((WS-Y2 + 4900 + ((WS-M2 - 14) / 12)) / 100)) / 4 + 
-               WS-D2 - 32075.
+           COMPUTE WS-A = (14 - WS-M2) / 12
+           COMPUTE WS-Y-ADJ = WS-Y2 + 4800 - WS-A
+           COMPUTE WS-M-ADJ = WS-M2 + (12 * WS-A) - 3
+           COMPUTE WS-T1 = (153 * WS-M-ADJ + 2) / 5
+           COMPUTE WS-T2 = WS-Y-ADJ / 4
+           COMPUTE WS-T3 = WS-Y-ADJ / 100
+           COMPUTE WS-T4 = WS-Y-ADJ / 400
+           COMPUTE WS-JDN-2 = WS-D2 + WS-T1 + (365 * WS-Y-ADJ) + 
+                              WS-T2 - WS-T3 + WS-T4 - 32045.
