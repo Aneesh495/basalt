@@ -88,13 +88,29 @@
            END-IF
 
       *> 5. Extract Amount
-           MOVE "IntrBkSttlmAmt" TO WS-TAG-NAME
-           PERFORM 1000-EXTRACT-TAG
-           IF WS-LEN > 0
-               MOVE 1000000.00000000 TO LNK-OUT-AMOUNT
-           ELSE
-               MOVE 500000.00000000 TO LNK-OUT-AMOUNT
-           END-IF.
+           MOVE 0 TO WS-LEN
+           PERFORM VARYING WS-START-POS FROM 1 BY 1 UNTIL WS-START-POS > 4000
+               IF LNK-IN-XML-BUFFER(WS-START-POS:14) = "IntrBkSttlmAmt"
+                   PERFORM VARYING WS-START-POS FROM WS-START-POS BY 1 
+                           UNTIL WS-START-POS > 4000 OR 
+                                 LNK-IN-XML-BUFFER(WS-START-POS:1) = ">"
+                       CONTINUE
+                   END-PERFORM
+                   ADD 1 TO WS-START-POS
+                   MOVE WS-START-POS TO WS-END-POS
+                   PERFORM VARYING WS-END-POS FROM WS-START-POS BY 1 
+                           UNTIL WS-END-POS > 4000 OR 
+                                 LNK-IN-XML-BUFFER(WS-END-POS:2) = "</"
+                       CONTINUE
+                   END-PERFORM
+                   COMPUTE WS-LEN = WS-END-POS - WS-START-POS
+                   IF WS-LEN > 0 AND WS-LEN <= 32
+                       MOVE LNK-IN-XML-BUFFER(WS-START-POS:WS-LEN) TO WS-TAG-VAL
+                       COMPUTE LNK-OUT-AMOUNT = FUNCTION NUMVAL(WS-TAG-VAL(1:WS-LEN))
+                   END-IF
+                   EXIT PERFORM
+               END-IF
+           END-PERFORM.
 
            GOBACK.
 
@@ -117,6 +133,7 @@
                    PERFORM VARYING WS-END-POS FROM WS-START-POS BY 1 
                            UNTIL WS-END-POS > 4000
                        IF LNK-IN-XML-BUFFER(WS-END-POS:2) = "</"
+                       CONTINUE
                            COMPUTE WS-LEN = WS-END-POS - WS-START-POS
                            IF WS-LEN > 0 AND WS-LEN <= 64
                                MOVE LNK-IN-XML-BUFFER(WS-START-POS:WS-LEN)

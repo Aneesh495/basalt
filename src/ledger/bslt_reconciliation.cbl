@@ -19,6 +19,12 @@
           05 WS-BREAK-COUNT              PIC 9(4)  VALUE 0.
           05 WS-I                        PIC 9(6)  VALUE 0.
           05 WS-DIFF                     PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 WS-CALL-ACC-ID              PIC X(16) VALUE SPACES.
+          05 WS-CALL-BIC                 PIC X(11) VALUE SPACES.
+          05 WS-CALL-TYPE                PIC 9(2)  VALUE 0.
+          05 WS-CALL-LIMIT               PIC S9(18)V9(8) COMP-3 VALUE 0.
+          05 WS-CALL-OUT-ACC             PIC X(256) VALUE SPACES.
+          05 WS-CALL-STATUS              PIC 9(4)  VALUE 0.
 
        LINKAGE SECTION.
        01 LNK-REC-OP                     PIC X(8).
@@ -55,30 +61,41 @@
            GOBACK.
 
        1000-TRIAL-BALANCE.
-      *> Aggregates all account balances in the specified currency
+      *> Aggregates all account balances in the specified currency via Account Manager
            MOVE 0 TO WS-TOTAL-SETTLED
-           PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > BS-ACC-COUNT
-               IF BS-TBL-ACC-CURRENCY(WS-I) = LNK-IN-CURRENCY
-                   ADD BS-TBL-ACC-SETTLED-BAL(WS-I) TO WS-TOTAL-SETTLED
-               END-IF
-           END-PERFORM
-
+           CALL "BSLT-ACCOUNT-MGR" USING "TRIALBAL"
+                                         WS-CALL-ACC-ID
+                                         WS-CALL-BIC
+                                         LNK-IN-CURRENCY
+                                         WS-CALL-TYPE
+                                         WS-TOTAL-SETTLED
+                                         WS-CALL-LIMIT
+                                         WS-CALL-OUT-ACC
+                                         WS-CALL-STATUS
            MOVE WS-TOTAL-SETTLED TO LNK-OUT-TRIAL-BALANCE.
 
        2000-CHECK-BREAK.
       *> Compares internal settled balance against external reported statement
            MOVE 0 TO LNK-OUT-BREAK-FLAG
-           PERFORM VARYING WS-I FROM 1 BY 1 UNTIL WS-I > BS-ACC-COUNT
-               IF BS-TBL-ACC-ID(WS-I) = LNK-IN-TARGET-ACC-ID
-                   COMPUTE WS-DIFF = 
-                       BS-TBL-ACC-SETTLED-BAL(WS-I) - 
-                       LNK-IN-EXT-REPORTED-BAL
-                   IF WS-DIFF NOT = 0
-                       MOVE 1 TO LNK-OUT-BREAK-FLAG
-                       MOVE WS-DIFF TO LNK-OUT-DISCREPANCY
-                   END-IF
-                   GOBACK
+           MOVE 0 TO LNK-OUT-DISCREPANCY
+           CALL "BSLT-ACCOUNT-MGR" USING "GET     "
+                                         LNK-IN-TARGET-ACC-ID
+                                         WS-CALL-BIC
+                                         LNK-IN-CURRENCY
+                                         WS-CALL-TYPE
+                                         WS-TOTAL-SETTLED
+                                         WS-CALL-LIMIT
+                                         WS-CALL-OUT-ACC
+                                         WS-CALL-STATUS
+           IF WS-CALL-STATUS = BS-RC-OK
+               MOVE WS-CALL-OUT-ACC TO BS-ACCOUNT-RECORD
+               COMPUTE WS-DIFF = 
+                   BS-ACC-SETTLED-BAL - 
+                   LNK-IN-EXT-REPORTED-BAL
+               IF WS-DIFF NOT = 0
+                   MOVE 1 TO LNK-OUT-BREAK-FLAG
+                   MOVE WS-DIFF TO LNK-OUT-DISCREPANCY
                END-IF
-           END-PERFORM
-
-           MOVE BS-RC-NOT-FOUND TO LNK-OUT-STATUS.
+           ELSE
+               MOVE WS-CALL-STATUS TO LNK-OUT-STATUS
+           END-IF.

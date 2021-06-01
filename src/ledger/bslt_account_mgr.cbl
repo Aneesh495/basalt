@@ -53,6 +53,8 @@
                    PERFORM 7000-FREEZE-ACCOUNT
                WHEN "UNFREEZE"
                    PERFORM 8000-UNFREEZE-ACCOUNT
+               WHEN "TRIALBAL"
+                   PERFORM 8500-TRIAL-BALANCE
                WHEN OTHER
                    MOVE BS-RC-PARSE-ERROR TO LNK-OUT-STATUS
            END-EVALUATE
@@ -194,6 +196,17 @@
            END-IF
            MOVE 'A' TO BS-TBL-ACC-STATUS(WS-TEMP-SEARCH-IDX)
            MOVE BS-ACC-ENTRY(WS-TEMP-SEARCH-IDX) TO LNK-OUT-ACCOUNT.
+
+       8500-TRIAL-BALANCE.
+           MOVE 0 TO LNK-IN-AMOUNT
+           PERFORM VARYING WS-TEMP-SEARCH-IDX FROM 1 BY 1
+                   UNTIL WS-TEMP-SEARCH-IDX > BS-ACC-COUNT
+               IF LNK-IN-CURRENCY = SPACES OR
+                  BS-TBL-ACC-CURRENCY(WS-TEMP-SEARCH-IDX) = LNK-IN-CURRENCY
+                   ADD BS-TBL-ACC-SETTLED-BAL(WS-TEMP-SEARCH-IDX)
+                       TO LNK-IN-AMOUNT
+               END-IF
+           END-PERFORM.
 
        9000-FIND-ACCOUNT.
            MOVE 0 TO WS-FOUND-FLAG
